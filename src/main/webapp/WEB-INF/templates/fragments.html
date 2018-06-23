@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Fragments</title>
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" th:fragment="menu(currentPage)">
+    <div class="container">
+        <a class="navbar-brand" href="home">Bac à sable</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li th:class="${currentPage == 'index'} ? 'nav-item active' : 'nav-item'">
+                    <a class="nav-link" href="home">Accueil
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li th:class="${currentPage == 'projets'} ? 'nav-item active' : 'nav-item'">
+                    <a class="nav-link" href="projets">Projets</a>
+                </li>
+                <li th:class="${currentPage == 'apropos'} ? 'nav-item active' : 'nav-item'">
+                    <a class="nav-link" href="apropos">À propos</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar Widgets Column -->
+<div class="col-md-3" th:fragment="widget">
+    <!-- Search Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">Rechercher</h5>
+        <div class="card-body">
+            <div class="input-group">
+                <form th:action="article" method="get">
+                <input class="form-control" type="text" list="articles" name="idarticle" placeholder="Ex : arduino">
+                <datalist id="articles" >
+                    <option th:value="${article.idarticle}" th:each="article : ${listOfArticles}"  th:text="${article.getNomArticle()}">
+                    </option>
+                </datalist>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">Catégories</h5>
+        <div class="card-body">
+            <a th:each="categorie : ${categorieList}" class="tag btn btn-xs btn-info" th:href="${'projets?idcategorie='+categorie.getIdcategorie()}" th:text="${categorie.getNomcategorie()}" >categorie</a>
+        </div>
+    </div>
+
+    <!-- Side Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">Tags populaires</h5>
+        <div class="card-body" >
+          <!-- <a th:each="tag : ${tagList}" th:class="${tag.getColor()==1?'tag btn btn-xs btn-info':'tag btn btn-xs btn-warning'}" href="#" th:text="${tag.getTagname()}" >tag</a>-->
+          <a th:each="tag : ${tagList}" class="tag btn btn-xs btn-warning" th:href="${'projets?idtag='+tag.getIdtag()}" th:text="'#'+${tag.getTagname()}" >tag</a>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
